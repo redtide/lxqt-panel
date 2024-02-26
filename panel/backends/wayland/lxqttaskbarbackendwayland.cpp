@@ -7,6 +7,9 @@
 #include <QTime>
 #include <QScreen>
 
+#include <QWindow>
+#include <qpa/qplatformwindow_p.h> //For getting QWaylandWindow
+
 auto findWindow(const std::vector<std::unique_ptr<LXQtTaskBarPlasmaWindow>>& windows, LXQtTaskBarPlasmaWindow *window)
 {
     //TODO: use algorithms
@@ -433,15 +436,18 @@ void LXQtTaskbarWaylandBackend::resizeApplication(WId windowId)
     window->request_resize();
 }
 
-void LXQtTaskbarWaylandBackend::refreshIconGeometry(WId windowId, const QRect &geom)
+void LXQtTaskbarWaylandBackend::refreshIconGeometry(WId windowId, const QRect &geom, QWindow *panelWindow)
 {
     LXQtTaskBarPlasmaWindow *window = getWindow(windowId);
     if(!window)
         return;
 
-    ::wl_surface *self = nullptr; //TODO
+    auto waylandWindow = panelWindow->nativeInterface<QNativeInterface::Private::QWaylandWindow>();
 
-    window->set_minimized_geometry(self, geom.x(), geom.y(), geom.width(), geom.height());
+    if(!waylandWindow || !waylandWindow->surface())
+        return;
+
+    window->set_minimized_geometry(waylandWindow->surface(), geom.x(), geom.y(), geom.width(), geom.height());
 }
 
 bool LXQtTaskbarWaylandBackend::isAreaOverlapped(const QRect &area) const

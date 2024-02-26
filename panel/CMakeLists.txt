@@ -105,7 +105,7 @@ endif ()
 
 project(${PROJECT})
 
-set(QTX_LIBRARIES Qt6::Widgets Qt6::Xml Qt6::DBus)
+set(QTX_LIBRARIES Qt6::GuiPrivate Qt6::Widgets Qt6::Xml Qt6::DBus)
 
 # Translations
 lxqt_translate_ts(QM_FILES SOURCES

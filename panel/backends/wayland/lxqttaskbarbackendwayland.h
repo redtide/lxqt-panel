@@ -57,11 +57,11 @@ public:
 
     virtual bool isWindowOnScreen(QScreen *screen, WId windowId) const override;
 
-    // X11 Specific
+    // X11 Specific TODO: not actually X11 specific in the end
     virtual void moveApplication(WId windowId) override;
     virtual void resizeApplication(WId windowId) override;
 
-    virtual void refreshIconGeometry(WId windowId, const QRect &geom) override;
+    virtual void refreshIconGeometry(WId windowId, const QRect &geom, QWindow *panelWindow) override;
 
     // Panel internal
     virtual bool isAreaOverlapped(const QRect& area) const override;
