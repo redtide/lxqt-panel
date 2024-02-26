@@ -556,8 +556,10 @@ void LXQtTaskbarX11Backend::resizeApplication(WId windowId)
     NETRootInfo(m_xcbConnection, NET::WMMoveResize).moveResizeRequest(windowId, X, Y, NET::BottomRight);
 }
 
-void LXQtTaskbarX11Backend::refreshIconGeometry(WId windowId, QRect const & geom)
+void LXQtTaskbarX11Backend::refreshIconGeometry(WId windowId, QRect const & geom, QWindow *panelWindow)
 {
+    Q_UNUSED(panelWindow)
+
     // NOTE: This function announces where the task icon is,
     // such that X11 WMs can perform their related animations correctly.
 

@@ -7,6 +7,7 @@
 
 class QIcon;
 class QScreen;
+class QWindow;
 
 class ILXQtTaskbarAbstractBackend : public QObject
 {
@@ -64,7 +65,7 @@ public:
     virtual void moveApplication(WId windowId) = 0;
     virtual void resizeApplication(WId windowId) = 0;
 
-    virtual void refreshIconGeometry(WId windowId, const QRect &geom) = 0;
+    virtual void refreshIconGeometry(WId windowId, const QRect &geom, QWindow *panelWindow) = 0;
 
     // Panel internal
     virtual bool isAreaOverlapped(const QRect& area) const = 0;

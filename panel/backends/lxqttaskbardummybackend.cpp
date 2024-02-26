@@ -144,7 +144,7 @@ void LXQtTaskBarDummyBackend::resizeApplication(WId)
     //No-op
 }
 
-void LXQtTaskBarDummyBackend::refreshIconGeometry(WId, QRect const &)
+void LXQtTaskBarDummyBackend::refreshIconGeometry(WId, QRect const &, QWindow*)
 {
     //No-op
 }

@@ -59,7 +59,7 @@ public:
     virtual void moveApplication(WId windowId) override;
     virtual void resizeApplication(WId windowId) override;
 
-    virtual void refreshIconGeometry(WId windowId, const QRect &geom) override;
+    virtual void refreshIconGeometry(WId windowId, const QRect &geom, QWindow *panelWindow) override;
 
     // Panel internal
     virtual bool isAreaOverlapped(const QRect& area) const override;

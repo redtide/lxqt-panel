@@ -444,15 +444,17 @@ void LXQtTaskGroup::refreshIconsGeometry()
     QRect rect = geometry();
     rect.moveTo(mapToGlobal(QPoint(0, 0)));
 
+    QWindow *panelWindow = parentTaskBar()->windowHandle();
+
     if (mSingleButton)
     {
-        mBackend->refreshIconGeometry(windowId(), rect);
+        mBackend->refreshIconGeometry(windowId(), rect, panelWindow);
         return;
     }
 
     for(LXQtTaskButton *but : std::as_const(mButtonHash))
     {
-        mBackend->refreshIconGeometry(but->windowId(), rect);
+        mBackend->refreshIconGeometry(but->windowId(), rect, panelWindow);
         but->setIconSize(QSize(plugin()->panel()->iconSize(), plugin()->panel()->iconSize()));
     }
 }
