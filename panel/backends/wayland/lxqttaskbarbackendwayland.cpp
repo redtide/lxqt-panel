@@ -435,7 +435,13 @@ void LXQtTaskbarWaylandBackend::resizeApplication(WId windowId)
 
 void LXQtTaskbarWaylandBackend::refreshIconGeometry(WId windowId, const QRect &geom)
 {
+    LXQtTaskBarPlasmaWindow *window = getWindow(windowId);
+    if(!window)
+        return;
 
+    ::wl_surface *self = nullptr; //TODO
+
+    window->set_minimized_geometry(self, geom.x(), geom.y(), geom.width(), geom.height());
 }
 
 bool LXQtTaskbarWaylandBackend::isAreaOverlapped(const QRect &area) const
