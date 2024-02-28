@@ -530,7 +530,11 @@ void LXQtTaskBar::realign()
 
     //our placement on screen could have been changed
     emit showOnlySettingChanged();
-    emit refreshIconGeometry();
+
+    //FIXME: this seems to get called before panel is shown, so no QWindow yet
+    // but then we need to retrigger in showEvent when we have QWindow available
+    if(window()->windowHandle())
+        emit refreshIconGeometry();
 }
 
 ILXQtPanel *LXQtTaskBar::panel() const

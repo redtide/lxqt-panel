@@ -444,7 +444,7 @@ void LXQtTaskGroup::refreshIconsGeometry()
     QRect rect = geometry();
     rect.moveTo(mapToGlobal(QPoint(0, 0)));
 
-    QWindow *panelWindow = parentTaskBar()->windowHandle();
+    QWindow *panelWindow = parentTaskBar()->window()->windowHandle();
 
     if (mSingleButton)
     {
