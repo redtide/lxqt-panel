@@ -312,6 +312,8 @@ LXQtPanel::LXQtPanel(const QString &configGroup, LXQt::Settings *settings, QWidg
                 mShowDelayTimer.start();
         }
     });
+
+    setAttribute(Qt::WA_MouseTracking);
 }
 
 /************************************************
@@ -1244,6 +1246,32 @@ QRect LXQtPanel::globalGeometry() const
     return geometry();
 }
 
+static bool shouldShowPanel(LXQtPanel *p, const QPoint& mousePos)
+{
+    int borderPos = 0;
+
+    switch (p->position())
+    {
+    case ILXQtPanel::PositionTop:
+    case ILXQtPanel::PositionLeft:
+        break;
+    case ILXQtPanel::PositionBottom:
+        borderPos = p->height();
+        break;
+    case ILXQtPanel::PositionRight:
+        borderPos = p->width();
+        break;
+    default:
+        break;
+    }
+
+    int mouseCoord = mousePos.y();
+    if(!p->isHorizontal())
+        mouseCoord = mousePos.x();
+
+    return qAbs(mouseCoord - borderPos) < PANEL_HIDE_SIZE;
+}
+
 
 /************************************************
 
@@ -1291,7 +1319,30 @@ bool LXQtPanel::event(QEvent *event)
 #endif
         // fall through
     case QEvent::Enter:
+        if(mHidden && qGuiApp->nativeInterface<QNativeInterface::QWaylandApplication>())
+        {
+            qDebug() << "HIDDEN:" << event << rect() << geometry();
+
+            // TODO: make a proper fix and remove this hack
+            // FIXME: panel activates when mouse enters the original screen area
+            if(!shouldShowPanel(this, static_cast<QEnterEvent *>(event)->position().toPoint()))
+            {
+                // Enter event is too distant from screen edge
+                // We refuse to show panel and wait for mouse move events
+                break;
+            }
+        }
         mShowDelayTimer.start();
+        break;
+
+    case QEvent::MouseMove:
+        if(mHidden && qGuiApp->nativeInterface<QNativeInterface::QWaylandApplication>())
+        {
+            // TODO: make a proper fix and remove this hack
+            // FIXME: panel activates when mouse enters the original screen area
+            if(shouldShowPanel(this, static_cast<QMouseEvent *>(event)->position().toPoint()))
+                mShowDelayTimer.start();
+        }
         break;
 
     case QEvent::Leave:
